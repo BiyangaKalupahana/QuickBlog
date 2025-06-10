@@ -1,9 +1,12 @@
-import React, { useState } from 'react' 
-import { blogCategories } from '../assets/assets'
+import React, { useState } from 'react'
+import { blogCategories, blog_data } from '../assets/assets' // <--- MODIFIED: blog_data imported from assets.js
 import { motion } from "framer-motion"
 
-const BlogList = () => { 
-  const [menu, setMenu] = useState('All') 
+import BlogCard from './BlogCard'; // Assuming BlogCard is in the same directory, adjust if not
+
+
+const BlogList = () => {
+  const [menu, setMenu] = useState('All')
 
   return (
     <div>
@@ -15,18 +18,20 @@ const BlogList = () => {
               className={`cursor-pointer text-gray-500 ${menu === item ? 'text-white px-4 pt-0.5' : ''}`}
             >
               {item}
-              {menu=== item &&(
-                    <motion.div layout id='underline'
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    className='absolute left-0 right-0 top-0 h-7 -z-1 bg-primary rounded-full'></motion.div>
+              {menu === item && (
+                <motion.div layout id='underline'
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  className='absolute left-0 right-0 top-0 h-7 -z-1 bg-primary rounded-full'></motion.div>
               )}
-              
+
             </button>
           </div>
         ))}
       </div>
-      <div>
-        {/*---blog cards---*/}
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 mb-24 mx-8 sm:mx-16 xl:mx-40'>
+        {/* Changed "ALL" to "All" for consistency with initial state and blogCategories */}
+        {blog_data.filter((blog) => menu === "All" ? true : blog.category === menu).
+          map((blog) => <BlogCard key={blog._id} blog={blog} />)}
       </div>
     </div>
   )
