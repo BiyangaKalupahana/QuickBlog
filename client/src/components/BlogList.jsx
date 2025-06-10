@@ -1,5 +1,6 @@
 import React, { useState } from 'react' 
 import { blogCategories } from '../assets/assets'
+import { motion } from "framer-motion"
 
 const BlogList = () => { 
   const [menu, setMenu] = useState('All') 
@@ -14,7 +15,12 @@ const BlogList = () => {
               className={`cursor-pointer text-gray-500 ${menu === item ? 'text-white px-4 pt-0.5' : ''}`}
             >
               {item}
-              <div className='absolute left-0 right-0 top-0 h-7 -z-1 bg-primary rounded-full'></div>
+              {menu=== item &&(
+                    <motion.div layout id='underline'
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    className='absolute left-0 right-0 top-0 h-7 -z-1 bg-primary rounded-full'></motion.div>
+              )}
+              
             </button>
           </div>
         ))}
