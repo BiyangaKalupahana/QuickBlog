@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { blogCategories, blog_data } from '../assets/assets' // <--- MODIFIED: blog_data imported from assets.js
+import { blogCategories, blog_data } from '../assets/assets' 
 import { motion } from "framer-motion"
 
-import BlogCard from './BlogCard'; // Assuming BlogCard is in the same directory, adjust if not
+import BlogCard from './BlogCard'; 
 
 
 const BlogList = () => {
