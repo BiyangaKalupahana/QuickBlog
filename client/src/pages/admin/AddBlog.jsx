@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
-import {assets} from '../../assets/assets'
+import React, { useEffect, useState, useRef} from 'react'
+import {assets, blogCategories} from '../../assets/assets'
+import Quill from 'quill'
 
 const AddBlog = () => {
+
+  const editorRef = useRef(null)
+  const quillRef = useRef(null)
 
 
   const [image, setImage] = useState(false);
@@ -17,6 +21,12 @@ const AddBlog = () => {
   const onSubmitHandler = async (e)=>{
     e.preventDefault();
   }
+
+  useEffect(()=>{
+      if(!quillRef.current && editorRef.current){
+        quillRef.current = new Quill(editorRef.current, {theme: 'snow'})
+      }
+  },[])
 
   return (
     <form onSubmit={onSubmitHandler} className='flex-1 bg-blue-50/50 text-gray-600 h-full overflow-scroll'> 
@@ -36,15 +46,20 @@ const AddBlog = () => {
 
         <p className='mt-4'>Blog Description</p>
         <div className="relative max-w-lg min-h-[200px] pb-16 sm:pb-10 pt-2">
-  <button type="button" onClick={generateContent} className="absolute bottom-4 right-4 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer"
-  >
-    Generate with AI
-  </button>
-</div>
+        <div ref={editorRef}></div>
+        <button type="button" onClick={generateContent} className="absolute bottom-4 right-4 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer">Generate with AI
+        </button>
+    </div>
+
+     <p className='mt-4'>Blog Category</p>
+     <select onChange={e => setCategory (e.target.value)} name="category" className='mt-2 px-3 py-2 border text-gray-500 border-gray-300 outline-none rounded'>
+      <option value="">Select Category</option>
+      {blogCategories.map((item, index)=>{
+        return <option key={index} value={item}>{item}</option>
+      })}
+     </select>
 
       </div>
-        
-     
     </form>
   )
 }
