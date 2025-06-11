@@ -1,4 +1,5 @@
 import React from 'react'
+import { assets } from '../../assets/assets'
 
 const BlogTableItem = ({blog, fetchBlogs, index}) => {
 
