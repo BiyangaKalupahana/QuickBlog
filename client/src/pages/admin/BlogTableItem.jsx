@@ -3,8 +3,8 @@ import { assets } from '../../assets/assets'
 
 const BlogTableItem = ({blog, fetchBlogs, index}) => {
 
-    const {title, createAt }= blog;
-    const BlogDate =new Date(createAt)
+    const {title, createdAt }= blog;
+    const BlogDate =new Date(createdAt)
 
 
   return (
