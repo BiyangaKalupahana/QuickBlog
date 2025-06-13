@@ -9,3 +9,6 @@ router.get('/test', (req, res) => {
 router.post('/login', loginAdmin); // ✅ Add this line
 
 module.exports = router;
+
+
+export default adminRouter;
