@@ -6,20 +6,20 @@ const adminRouter = require('./routes/adminRoutes');
 
 const app = express();
 
-// Middlewares
+// Middleware
 app.use(cors());
 app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => res.send("API is working"));
-app.use('/api/admin', adminRouter); // ✅ Fixed route
+app.use('/api/admin', adminRouter);
 
 // Start server
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    await connectDB();
+    await connectDB(); // ✅ This is the only place to call await connectDB()
     app.listen(PORT, () => {
       console.log('Server is running on port ' + PORT);
     });
@@ -28,4 +28,4 @@ const startServer = async () => {
   }
 };
 
-startServer();
+startServer(); // ✅ Start everything inside this async function
