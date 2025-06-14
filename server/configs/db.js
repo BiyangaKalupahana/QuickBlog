@@ -1,16 +1,17 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
-import connectDB from './configs/db.js';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const connectDB = async () => {
   try {
     mongoose.connection.on('connected', () =>
-      console.log('Database Connected')
+      console.log('✅ Database Connected')
     );
     await mongoose.connect(`${process.env.MONGODB_URI}/quickblog`);
   } catch (error) {
-    console.log(error.message);
+    console.log('❌ DB Connection Error:', error.message);
   }
 };
 
-module.exports = connectDB;
+export default connectDB;
