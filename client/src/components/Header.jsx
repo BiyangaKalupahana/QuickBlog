@@ -12,6 +12,11 @@ const onSubmitHandler = async (e) =>{
   setInput(inputRef.current.value)
 }
 
+const onClear = ()=>{
+  setInput('')
+  inputRef.current.value = ''
+}
+
 
   return (
     <div className='mx-8 sm:mx-16 xl:mx-24 relative'>
@@ -30,6 +35,12 @@ const onSubmitHandler = async (e) =>{
               <button type="submit" className='bg-primary text-white px-8 py-2 m-1.5 rounded hover:scale-105 transition-all cursor-pointer'>Search</button>
             </form>
 
+        </div>
+
+        <div className='text-center'>
+          {
+          input && <button onClick={onClear} className='border font-light text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer'>Clear Search</button>
+          }
         </div>
         <img src={assets.gradientBackground} alt="" className='absolute -top-50 -z-1 opacity-50'/>
     </div>
