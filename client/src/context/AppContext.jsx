@@ -6,6 +6,9 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [token, setToken] = useState('');
+  const [blogs, setBlogs] = useState([]); // ✅ Add blogs
+  const [input, setInput] = useState('');
+  
   const navigate = useNavigate();
 
   // Set default base URL here (update to match your backend port if needed)
