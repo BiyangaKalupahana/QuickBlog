@@ -1,11 +1,8 @@
 import { Component } from 'react';
 import Blog from '../models/Blog.js';
 import Comment from '../models/Comment.js';
+import jwt from 'jsonwebtoken';
 
-// controllers/adminController.js
-const Admin = require('../models/adminModel'); // adjust path as needed
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 export const adminLogin = async (requestAnimationFrame, res) =>{
   try{
