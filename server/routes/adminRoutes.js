@@ -1,14 +1,15 @@
-const express = require('express');
-const router = express.Router();
-const { loginAdmin } = require('../controllers/adminController'); // Adjust the path as needed
+import express from "express";
+import { adminLogin, getAllBlogsAdmin, deleteCommentById, getAllComments, approveCommentById, getDashboard } from "../controllers/adminController.js";
 
-router.get('/test', (req, res) => {
-  res.send("Admin Route Working");
-});
 
-router.post('/login', loginAdmin); // ✅ Add this line
+const adminRouter = express.Router();
 
-module.exports = router;
+adminRouter.post("/login", adminLogin);
+adminRouter.get("/comments", auth, getAllComments);
+adminRouter.get("/blogs", auth, getAllBlogsAdmin);
+adminRouter.post("/delete-comment", auth, deleteCommentById);
+adminRouter.post("/approve-comment", auth, approveCommentById);
+adminRouter.get("/dashboard", auth, getDashboard);
 
 
 export default adminRouter;
