@@ -20,14 +20,15 @@ const Blog = () => {
   const [name, setName] = useState('')
   const [content, setContent] = useState('')
 
-  const fetchBlogData=  async () =>{
-  try{
-const {data} = await axios.get('/api/blog/${id}')
-data.success ? setData(data.blog) : toast.error(data.message)
-  } catch(error){
-    toast.error(data.message)
+  const fetchBlogData = async () => {
+  try {
+    const res = await axios.get(`/api/blog/${id}`);
+    res.data.success ? setData(res.data.blog) : toast.error(res.data.message);
+  } catch (error) {
+    toast.error("Failed to fetch blog data");
   }
-  }
+};
+
 
   const fetchComments =async() =>{
     try{
