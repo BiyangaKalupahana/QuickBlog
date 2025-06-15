@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { assets } from '../../assets/assets'
 
+
 const Sidebar = () => {
   return (
     <div className='flex flex-col border-r border-gray-200 min-h-full pt-6'>

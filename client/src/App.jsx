@@ -11,8 +11,7 @@ import Login from './components/admin/Login';
 import 'quill/dist/quill.snow.css';
 import { Toaster } from 'react-hot-toast';
 import { useAppContext } from './context/AppContext';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+
 
 
 const App = () => {
