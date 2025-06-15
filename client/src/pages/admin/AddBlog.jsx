@@ -163,7 +163,12 @@ const AddBlog = () => {
         <p className='mt-4'>Blog Description</p>
         <div className="relative max-w-lg min-h-[200px] pb-16 sm:pb-10 pt-2">
           {/* Quill Editor will mount here */}
-          <div ref={editorRef} style={{ height: '150px', border: '1px solid #ccc' }}></div> {/* Added min-height for visibility */}
+          <div ref={editorRef}></div> 
+          {loading && (
+            <div className='absolute right-0 top-0 bottom-0 left-0 flex items-center justify-center bg-black/10 mt-2'>
+            <div className='w-8 h-8 rounded-full border-2 border-t-white animate-spin'>
+              </div>
+            </div>)}
           <button disabled={loading}
             type="button" // Important: type="button" to prevent form submission
             onClick={generateContent}
