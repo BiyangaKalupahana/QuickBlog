@@ -3,11 +3,13 @@ import {assets, blogCategories} from '../../assets/assets'
 import Quill from 'quill'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast';
+import {parse} from 'marked'
 
 const AddBlog = () => {
 
   const {axios} = useAppContext()
   const [isAdding, setIsAdding] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const editorRef = useRef(null)
   const quillRef = useRef(null)
@@ -20,7 +22,21 @@ const AddBlog = () => {
   const [isPublished, setIsPublished] = useState(false);
 
   const generateContent = async()=>{
+    if(!title) return toast.error('Please enter a title')
 
+      try{
+        setLoading(true);
+        const {data} = await axios.post('/blog/generate', {prompt: title})
+        if(data.success){
+          quillRef.current.root.innerHTML = parse(data.content)
+        } else{
+          toast.error(data.message)
+        }
+      } catch(error){
+        toast.error(error.message)
+      } finally{
+        setLoading(false)
+      }
   }
 
   const onSubmitHandler = async (e)=>{
@@ -148,7 +164,7 @@ const AddBlog = () => {
         <div className="relative max-w-lg min-h-[200px] pb-16 sm:pb-10 pt-2">
           {/* Quill Editor will mount here */}
           <div ref={editorRef} style={{ height: '150px', border: '1px solid #ccc' }}></div> {/* Added min-height for visibility */}
-          <button
+          <button disabled={loading}
             type="button" // Important: type="button" to prevent form submission
             onClick={generateContent}
             className="absolute bottom-4 right-4 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer"
