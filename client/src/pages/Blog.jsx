@@ -129,7 +129,7 @@ const Blog = () => {
         {/* You can add the author name here if your blog object includes it */}
         {blog.author && (
           <p className='text-sm text-gray-500'>
-            By: <span className="font-semibold text-primary">{blog.author}</span>
+            By: Baby Browns<span className="font-semibold text-primary">{blog.author}</span>
           </p>
         )}
          

@@ -13,7 +13,7 @@ import { Toaster } from 'react-hot-toast';
 import { useAppContext } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import CommentTableItem from './pages/admin/CommentTableItem';
+
 
 const App = () => {
   const { token } = useAppContext();
