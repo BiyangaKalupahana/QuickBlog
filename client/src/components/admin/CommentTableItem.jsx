@@ -1,57 +1,49 @@
-// client/src/components/admin/CommentTableItem.jsx
-
 import React from 'react';
 import { assets } from '../../assets/assets';
-import { useAppContext } from '../../context/AppContext'; // Import useAppContext to get axios
-import toast from 'react-hot-toast'; // Import toast for notifications
-import moment from 'moment'; // Assuming you have moment for date formatting
+import { useAppContext } from '../../context/AppContext'; 
+import toast from 'react-hot-toast';
+
 
 const CommentTableItem = ({ comment, fetchComments }) => {
-    // Destructure comment properties.
-    // Use `comment || {}` to handle cases where `comment` itself might be null/undefined.
-    // Use `blog = {}` to provide a default empty object if `comment.blog` is undefined,
-    // so `blog.title` doesn't cause an error.
-    const { name, content, createdAt, _id, isApproved, blog = {} } = comment || {};
+    
+   const {blog, createdAt, _id} = comment;
+   const BlogDate = new Date(createdAt);
 
-    // Safely get the blog title, defaulting to 'N/A' if blog or blog.title is missing
-    const BlogTitle = blog.title || 'N/A';
-    const CommentDate = new Date(createdAt); // Renamed from BlogDate for clarity
+    const { axios } = useAppContext(); 
 
-    const { axios } = useAppContext(); // Get axios from context
-
-    // Handler for approving a comment
-    const handleApproveComment = async () => {
-        try {
-            // Use axios from context for API call
-            const response = await axios.post('/admin/approve-comment', { id: _id });
-            if (response.data.success) {
-                toast.success('Comment approved successfully!');
-                fetchComments(); // Re-fetch comments to update the list
-            } else {
-                toast.error(response.data.message || 'Failed to approve comment.');
+    const approveComment = async()=>{
+        try{
+            const {data} = await axios.post('/admin/approve-comment', {id: _id})
+            if(data.success){
+                toast.success(data.message)
+                fetchComments()
+            } else{
+                toast.error(data.message)
             }
-        } catch (error) {
-            console.error('Error approving comment:', error);
-            toast.error(error.response?.data?.message || error.message || 'Error approving comment.');
+        } catch (error){
+            toast.error(error.message)
         }
-    };
+    }
 
-    // Handler for deleting a comment
-    const handleDeleteComment = async () => {
-        try {
-            // Use axios from context for API call
-            const response = await axios.post('/admin/delete-comment', { id: _id });
-            if (response.data.success) {
-                toast.success('Comment deleted successfully!');
-                fetchComments(); // Re-fetch comments to update the list
-            } else {
-                toast.error(response.data.message || 'Failed to delete comment.');
+
+    const deleteComment = async()=>{
+        try{
+
+            const confirm = window.confirm('Are you sure you want to delete this comment?');
+            if(!confirm) return;
+            const {data} = await axios.post('/admin/delete-comment', {id: _id})
+            if(data.success){
+                toast.success(data.message)
+                fetchComments()
+            } else{
+                toast.error(data.message)
             }
-        } catch (error) {
-            console.error('Error deleting comment:', error);
-            toast.error(error.response?.data?.message || error.message || 'Error deleting comment.');
+        } catch (error){
+            toast.error(error.message)
         }
-    };
+    }
+
+    
 
     return (
         <tr className='border-y border-gray-300'>
@@ -61,7 +53,7 @@ const CommentTableItem = ({ comment, fetchComments }) => {
                 <br />
                 <b className='font-medium text-gray-600'>Name</b> : {name}
                 <br />
-                <b className='font-medium text-gray-600'>Comment</b> : {content} {/* Corrected typo 'Commment' */}
+                <b className='font-medium text-gray-600'>Comment</b> : {comment.content} {/* Corrected typo 'Commment' */}
             </td>
 
             <td className='px-6 py-4 max-sm:hidden'>
@@ -75,19 +67,17 @@ const CommentTableItem = ({ comment, fetchComments }) => {
                         <img
                             src={assets.tick_icon}
                             className='w-5 hover:scale-110 transition-all cursor-pointer'
-                            onClick={handleApproveComment} // Add click handler
-                            alt="Approve Comment"
+                            onClick={approveComment} // Add click handler
+                            alt=""
                         />
-                        :
-                        // "Approved" badge
-                        <p className='text-xs border border-green-600 bg-green-100 text-green-700 rounded-full px-3 py-1'>Approved</p>
+                        : <p className='text-xs border border-green-600 bg-green-100 text-green-700 rounded-full px-3 py-1'>Approved</p>
                     }
-                    {/* Bin icon for deleting comment */}
+                    
                     <img
                         src={assets.bin_icon}
-                        alt="Delete Comment"
+                        alt=""
                         className='w-5 hover:scale-110 transition-all cursor-pointer'
-                        onClick={handleDeleteComment} // Add click handler
+                        onClick={deleteComment} // Add click handler
                     />
                 </div>
             </td>
