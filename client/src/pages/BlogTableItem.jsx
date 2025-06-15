@@ -1,5 +1,6 @@
 import React from 'react'
-import { assets } from '../../assets/assets'
+import { assets } from '../assets/assets'
+import Navbar from '../components/Navbar'
 
 const BlogTableItem = ({blog, fetchBlogs, index}) => {
 
@@ -8,6 +9,9 @@ const BlogTableItem = ({blog, fetchBlogs, index}) => {
 
 
   return (
+    <div>
+    <Navbar/>       
+    
     <tr className='border-y border-gray-300'>
         <th className='px-2 py-4'>{index}</th>
         <td className='px-2 py-4'>{title}</td>
@@ -20,6 +24,7 @@ const BlogTableItem = ({blog, fetchBlogs, index}) => {
             <img src={assets.cross_icon} alt="" className='w-8 hover:scale-110 transition-all cursor-pointer'/>
         </td>
     </tr>
+    </div>
   )
 }
 

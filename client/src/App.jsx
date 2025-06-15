@@ -11,6 +11,9 @@ import Login from './components/admin/Login';
 import 'quill/dist/quill.snow.css';
 import { Toaster } from 'react-hot-toast';
 import { useAppContext } from './context/AppContext';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import CommentTableItem from './pages/admin/CommentTableItem';
 
 const App = () => {
   const { token } = useAppContext();
@@ -20,7 +23,14 @@ const App = () => {
       <Toaster />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/blog/:id' element={<Blog />} />
+        <Route path='/blog/:id' element={
+         
+            
+            <Blog /> 
+
+        
+          
+        } />
         <Route path='/login' element={<Login />} />
         <Route
           path='/admin'
