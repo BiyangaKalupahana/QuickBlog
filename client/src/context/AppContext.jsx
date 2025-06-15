@@ -6,35 +6,38 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [token, setToken] = useState('');
-  const [blogs, setBlogs] = useState([]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [blogs, setBlogs] = useState([]); // State to store all blogs
+  const [input, setInput] = useState(''); // State for search input
+  const [loading, setLoading] = useState(true); // State to manage loading status of blogs
 
   const navigate = useNavigate();
 
+  // Set default base URL for Axios
+  // This ensures all requests are prefixed with 'http://localhost:3000/api'
   axios.defaults.baseURL = 'http://localhost:3000/api';
 
-  // Function to fetch all blogs
+  // Function to fetch all blogs from the backend
   const fetchBlogs = async () => {
     try {
-      setLoading(true); // Set loading to true before fetching
-      const response = await axios.get('/blog/all'); // Corrected endpoint
+      setLoading(true); // Set loading to true before fetching data
+      const response = await axios.get('/blog/all'); // API endpoint to get all blogs
       if (response.data.success) {
-        setBlogs(response.data.blogs);
+        setBlogs(response.data.blogs); // Update blogs state with fetched data
       } else {
         console.error('Failed to fetch blogs:', response.data.message);
       }
     } catch (error) {
       console.error('Error fetching blogs:', error);
+      // Optionally show a toast error to the user here
     } finally {
-      setLoading(false); // Set loading to false after fetching (success or error)
+      setLoading(false); // Set loading to false after fetching (whether success or failure)
     }
   };
 
-  // Fetch blogs on component mount
+  // useEffect hook to call fetchBlogs when the component mounts
   useEffect(() => {
     fetchBlogs();
-  }, []); // Empty dependency array means this runs once on mount
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
     <AppContext.Provider value={{ token, setToken, navigate, axios, blogs, input, setInput, loading }}>
