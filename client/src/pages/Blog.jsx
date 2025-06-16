@@ -1,196 +1,171 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppContext } from '../context/AppContext'; // Corrected path
-import { assets, blog_data, comments_data } from '../assets/assets';
+import { useAppContext } from '../context/AppContext';
+import { assets } from '../assets/assets';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
-import moment from 'moment'; // For formatting date/time
-
-
+import moment from 'moment';
+import toast from 'react-hot-toast';
 
 const Blog = () => {
-  const { id } = useParams(); // Get the blog ID from the URL (e.g., /blog/:id)
-  const { axios } = useAppContext(); // Get the axios instance from your AppContext
-  const [blog, setBlog] = useState(null); // State to store the fetched blog data
-  const [loading, setLoading] = useState(true); // State to manage loading status
-  const [error, setError] = useState(null); // State to store any errors during fetch
+  const { id } = useParams();
+  const { axios } = useAppContext();
+  const [blog, setBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  const [comments, setComments] = useState([]);
+  const [name, setName] = useState('');
+  const [content, setContent] = useState('');
 
-    const [data, setData] = useState(null)
-    const [comments, setComments] = useState([])
-    const [name, setName] = useState('')
-    const [content, setContent] = useState('')
-  
-
-    const fetchBlogData = async ()=>{
-      try{
-        const {data} = await axios.get(`/api/blog/${id}`)
-        data.success ? setData(data.blog) : toast.error(data.message)
-      } catch(error){
-        toast.error(comments_data)
+  const fetchComments = async () => {
+    try {
+      const { data } = await axios.post('/api/blog/comments', { blogId: id });
+      if (data.success) {
+        setComments(data.comments);
+      } else {
+        toast.error(data.message);
       }
-    }
-
-    const fetchComments = async () =>{
-      try{
-        const {data} = await axios.post('/api/blog/comments', {blogId: id})
-        if(data.success){
-          setComments(data.comments)
-        } else{
-          toast.error(data.message);
-        }
-      } catch(error) {
-        toast.error(error.message);
-      }
-    }
-
-    const addComment = async (e) =>{
-      try{
-        const {data} = await axios.post('/api/blog/add-comment', {blogId: id, name,content});
-        if(data.success){
-          toast.success(data.message)
-          setName('')
-          setContent('')
-        } else{
-          toast.error(data.message);
-        }
-      } catch(error){
+    } catch (error) {
       toast.error(error.message);
-      }
     }
-  
-    useEffect(() => {
+  };
 
-      fetchBlogData()
-      fetchComments()
-      
-    // Function to fetch details of a single blog post by its ID
-    const fetchBlogDetails = async () => {
-      try {
-        setLoading(true); // Start loading
-        setError(null); // Clear any previous errors
+  const fetchBlogDetails = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`/blog/${id}`);
 
-        // Make an API call to your backend to get the blog details
-        // The URL will be like http://localhost:3000/api/blog/:id
-        const response = await axios.get(`/blog/${id}`);
-
-        if (response.data.success) {
-          setBlog(response.data.blog); // Set the fetched blog data
-        } else {
-          // If backend indicates failure, set an error message
-          setError(response.data.message || 'Failed to fetch blog details.');
-        }
-      } catch (err) {
-        console.error('Error fetching blog details:', err);
-        // Set error message from the response or a generic one
-        setError(err.response?.data?.message || err.message || 'An error occurred while fetching the blog.');
-      } finally {
-        setLoading(false); // Stop loading regardless of success or failure
+      if (response.data.success) {
+        setBlog(response.data.blog);
+      } else {
+        setError(response.data.message || 'Failed to fetch blog details.');
       }
-    };
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'An error occurred while fetching the blog.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Only attempt to fetch if an ID is present in the URL
+  const addComment = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await axios.post('http://localhost:3000/api/blog/add-comment', {
+        blog: id,
+        name,
+        content
+      });
+
+      if (data.success) {
+        toast.success(data.message);
+        setName('');
+        setContent('');
+        fetchComments();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  useEffect(() => {
     if (id) {
       fetchBlogDetails();
+      fetchComments();
     } else {
-      // If no ID is present, stop loading and set an error
       setLoading(false);
-      setError("No blog ID provided in the URL.");
+      setError('No blog ID provided in the URL.');
     }
-  }, [id, axios]); // Re-run this effect if 'id' or 'axios' changes
+  }, [id, axios]);
 
-  // Conditional rendering based on loading, error, or blog data
-  if (loading) {
-    return <Loader />; // Show a loading spinner
-  }
+  if (loading) return <Loader />;
+  if (error) return <div className="text-center text-red-500 text-lg py-20">Error: {error}</div>;
+  if (!blog) return <div className="text-center text-gray-500 text-lg py-20">Blog not found or deleted.</div>;
 
-  if (error) {
-    return <div className="text-center text-red-500 text-lg py-20">Error: {error}</div>; // Display error message
-  }
-
-  if (!blog) {
-    return <div className="text-center text-gray-500 text-lg py-20">Blog not found or deleted.</div>; // If no blog data
-  }
-
-  // Render the blog content once loaded
   return (
-    <div className='max-w-4xl mx-auto px-6 py-10'>
-
-      {/* --- START: Centered Header Content --- */}
-      {/* This new div with 'text-center' will center its child text content */}
-      <div className="text-center mb-10"> {/* Added text-center and mb for spacing */}
-        <p className='text-sm text-gray-500 mb-2'>
-          Published on: {moment(blog.createdAt).format('MMMM Do, YYYY')} {/* Corrected format to match image */}
-        </p>
-        <h1 className='text-4xl sm:text-5xl font-bold text-gray-800 mb-2'>{blog.title}</h1>
-        <p className='text-lg sm:text-xl text-gray-600 mb-4'>{blog.subTitle}</p>
-        {/* You can add the author name here if your blog object includes it */}
+    <div className="max-w-4xl mx-auto px-6 py-10">
+      <div className="text-center mb-10">
+        <p className="text-sm text-gray-500 mb-2">Published on: {moment(blog.createdAt).format('MMMM Do, YYYY')}</p>
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">{blog.title}</h1>
+        <p className="text-lg sm:text-xl text-gray-600 mb-4">{blog.subTitle}</p>
         {blog.author && (
-          <p className='text-sm text-gray-500'>
-            By: Baby Browns<span className="font-semibold text-primary">{blog.author}</span>
-          </p>
+          <p className="text-sm text-gray-500">By: <span className="font-semibold text-primary">{blog.author}</span></p>
         )}
-         
       </div>
-      
+
       {blog.image && (
         <img
           src={blog.image}
           alt={blog.title}
-          className='w-full max-h-96 object-cover rounded-lg mb-8 shadow-md'
+          className="w-full max-h-96 object-cover rounded-lg mb-8 shadow-md"
         />
       )}
 
-      {/* Blog Description (rich text content) */}
       <div
-        className='text-gray-700 leading-relaxed rich-text'
+        className="text-gray-700 leading-relaxed rich-text"
         dangerouslySetInnerHTML={{ __html: blog.description }}
       ></div>
 
-     <div className='mt-14 mb-10 max-w-3xl mx-auto'>
-      <p className='font-semibold mb-4'>Comments ({comments.length})</p>
-      <div className="flex flex-col gap-4">
-        {comments.map((item, index)=>(
-          <div key={index} className='relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-gray-600'>
-            <div className='flex items-center gap-2 mb-2'>
-                <img src={assets.user_icon} alt="" className='w-6'/>
-            <p className='font-medium'>{item.name}</p>
-            </div>
-            <p className='text-sm max-w-md ml-8'>{item.content}</p>
-            <div className='absolute right-4 bottom-3 flex items-center gap-2 text-xs'>
+      <div className="mt-14 mb-10 max-w-3xl mx-auto">
+        <p className="font-semibold mb-4">Comments ({comments.length})</p>
+        <div className="flex flex-col gap-4">
+          {comments.map((item, index) => (
+            <div key={index} className="relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-gray-600">
+              <div className="flex items-center gap-2 mb-2">
+                <img src={assets.user_icon} alt="" className="w-6" />
+                <p className="font-medium">{item.name}</p>
+              </div>
+              <p className="text-sm max-w-md ml-8">{item.content}</p>
+              <div className="absolute right-4 bottom-3 flex items-center gap-2 text-xs">
                 {moment(item.createdAt).fromNow()}
+              </div>
             </div>
-            
-          </div>
-        ))}
-      </div>
-     </div>
-
-    {/* comment form*/} 
-     <div className='max-w-3xl mx-auto'>
-        <p className='font-semibold mb-4'>Add your comment</p>
-        <form onSubmit={addComment} className='flex flex-col items-start gap-4 max-w-lg'>
-          <input onChange={(e)=> setName(e.target.value)} value={name} type="text" placeholder='Name' required className='w-full p-2 border border-gray-300 rounded outline-none' />
-          <textarea onChange={(e)=> setContent(e.target.value)} value={content}  placeholder='Comment' className='w-full p-2 border border-gray-300 rounded outline-none h-48' required></textarea>
-
-          <button type='submit' className='bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer'>Submit</button>
-        </form>
-     </div>
-
-
-{/*social media icons*/}
-     <div className='my-24 max-w-3xl mx-auto'>
-        <p className='font-semibold my-4'>Share this article on social media</p>
-        <div className='flex'>
-          <img src={assets.facebook_icon} width={50} alt="" />
-          <img src={assets.twitter_icon} width={50} alt="" />
-          <img src={assets.googleplus_icon} width={50} alt="" />
+          ))}
         </div>
-     </div>
+      </div>
 
-<Footer />
-      
+      <div className="max-w-3xl mx-auto">
+        <p className="font-semibold mb-4">Add your comment</p>
+        <form onSubmit={addComment} className="flex flex-col items-start gap-4 max-w-lg">
+          <input
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            type="text"
+            placeholder="Name"
+            required
+            className="w-full p-2 border border-gray-300 rounded outline-none"
+          />
+          <textarea
+            onChange={(e) => setContent(e.target.value)}
+            value={content}
+            placeholder="Comment"
+            className="w-full p-2 border border-gray-300 rounded outline-none h-48"
+            required
+          ></textarea>
+          <button
+            type="submit"
+            className="bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+
+      <div className="my-24 max-w-3xl mx-auto">
+        <p className="font-semibold my-4">Share this article on social media</p>
+        <div className="flex">
+          <img src={assets.facebook_icon} width={50} alt="facebook" />
+          <img src={assets.twitter_icon} width={50} alt="twitter" />
+          <img src={assets.googleplus_icon} width={50} alt="google plus" />
+        </div>
+      </div>
+
+      <Footer />
     </div>
   );
 };
