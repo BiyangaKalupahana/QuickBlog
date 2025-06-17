@@ -14,13 +14,13 @@ export const AppProvider = ({ children }) => {
 
   // Set default base URL for Axios
   // This ensures all requests are prefixed with 'http://localhost:3000/api'
-  axios.defaults.baseURL = 'http://localhost:3000/api';
+  axios.defaults.baseURL = 'http://localhost:3000';
 
   // Function to fetch all blogs from the backend
   const fetchBlogs = async () => {
     try {
       setLoading(true); // Set loading to true before fetching data
-      const response = await axios.get('/blog/all'); // API endpoint to get all blogs
+      const response = await axios.get('/api/blog/all'); // API endpoint to get all blogs
       if (response.data.success) {
         setBlogs(response.data.blogs); // Update blogs state with fetched data
       } else {

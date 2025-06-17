@@ -36,7 +36,7 @@ const Blog = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`/blog/${id}`);
+      const response = await axios.get(`/api/blog/${id}`);
 
       if (response.data.success) {
         setBlog(response.data.blog);
@@ -54,7 +54,7 @@ const Blog = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post('http://localhost:3000/api/blog/add-comment', {
+      const { data } = await axios.post('/api/blog/add-comment', {
         blog: id,
         name,
         content
