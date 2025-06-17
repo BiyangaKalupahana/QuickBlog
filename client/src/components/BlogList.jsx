@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { blogCategories } from '../assets/assets'; // Make sure 'Startup' is in this array!
+import { blogCategories } from '../assets/assets'; 
 import { motion } from "framer-motion";
 import BlogCard from './BlogCard';
 import { useAppContext } from '../context/AppContext';
-import Loader from './Loader'; // Import your Loader component
+import Loader from './Loader'; 
 
 const BlogList = () => {
-  const [menu, setMenu] = useState('All'); // State to keep track of the active category tab
-  const { blogs, input, loading } = useAppContext(); // Destructure blogs, input, and loading from context
+  const [menu, setMenu] = useState('All'); 
+  const { blogs, input, loading } = useAppContext(); 
 
   // Function to filter blogs based on search input
   const filteredBlogs = () => {
-    // Safeguard: If blogs array is not yet loaded or is null/undefined, return an empty array
     if (!blogs) return [];
 
-    // If search input is empty, return all fetched blogs
     if (input === '') {
       return blogs;
     }

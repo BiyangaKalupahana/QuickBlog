@@ -11,7 +11,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/admin/login', { email, password });
+      const { data } = await axios.post('/api/admin/login', { email, password });
 
       if (data.success) {
         setToken(data.token);
@@ -65,7 +65,7 @@ const Login = () => {
             <button
               type="submit"
               className='w-full py-3 font-medium bg-primary text-white rounded cursor-pointer hover:bg-primary/90 transition-all'
-            ><span>Admin</span>Login
+            >Login
             </button>
           </form>
         </div>

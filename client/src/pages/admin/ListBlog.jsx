@@ -11,7 +11,7 @@ const ListBlog = () => {
 
   const fetchBlogs = async () => {
     try{
-      const {data} = await axios.get('/admin/blogs')
+      const {data} = await axios.get('/api/admin/blogs')
       if(data.success){
         setBlogs(data.blogs)
       } else{

@@ -26,7 +26,7 @@ const AddBlog = () => {
 
       try{
         setLoading(true);
-        const {data} = await axios.post('/blog/generate', {prompt: title})
+        const {data} = await axios.post('/api/blog/generate', {prompt: title})
         if(data.success){
           quillRef.current.root.innerHTML = parse(data.content)
         } else{
