@@ -88,85 +88,88 @@ const Blog = () => {
   if (!blog) return <div className="text-center text-gray-500 text-lg py-20">Blog not found or deleted.</div>;
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
-      <div className="text-center mb-10">
-        <p className="text-sm text-gray-500 mb-2">Published on: {moment(blog.createdAt).format('MMMM Do, YYYY')}</p>
-        <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">{blog.title}</h1>
-        <p className="text-lg sm:text-xl text-gray-600 mb-4">{blog.subTitle}</p>
-        {blog.author && (
-          <p className="text-sm text-gray-500">By: <span className="font-semibold text-primary">{blog.author}</span></p>
-        )}
-      </div>
-
-      {blog.image && (
-        <img
-          src={blog.image}
-          alt={blog.title}
-          className="w-full max-h-96 object-cover rounded-lg mb-8 shadow-md"
-        />
-      )}
-
-      <div
-        className="text-gray-700 leading-relaxed rich-text"
-        dangerouslySetInnerHTML={{ __html: blog.description }}
-      ></div>
-
-      <div className="mt-14 mb-10 max-w-3xl mx-auto">
-        <p className="font-semibold mb-4">Comments ({comments.length})</p>
-        <div className="flex flex-col gap-4">
-          {comments.map((item, index) => (
-            <div key={index} className="relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-gray-600">
-              <div className="flex items-center gap-2 mb-2">
-                <img src={assets.user_icon} alt="" className="w-6" />
-                <p className="font-medium">{item.name}</p>
-              </div>
-              <p className="text-sm max-w-md ml-8">{item.content}</p>
-              <div className="absolute right-4 bottom-3 flex items-center gap-2 text-xs">
-                {moment(item.createdAt).fromNow()}
-              </div>
-            </div>
-          ))}
+    <>
+      <Navbar />
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <div className="text-center mb-10">
+          <p className="text-sm text-gray-500 mb-2">Published on: {moment(blog.createdAt).format('MMMM Do, YYYY')}</p>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">{blog.title}</h1>
+          <p className="text-lg sm:text-xl text-gray-600 mb-4">{blog.subTitle}</p>
+          {blog.author && (
+            <p className="text-sm text-gray-500">By: <span className="font-semibold text-primary">{blog.author}</span></p>
+          )}
         </div>
-      </div>
 
-      <div className="max-w-3xl mx-auto">
-        <p className="font-semibold mb-4">Add your comment</p>
-        <form onSubmit={addComment} className="flex flex-col items-start gap-4 max-w-lg">
-          <input
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            type="text"
-            placeholder="Name"
-            required
-            className="w-full p-2 border border-gray-300 rounded outline-none"
+        {blog.image && (
+          <img
+            src={blog.image}
+            alt={blog.title}
+            className="w-full max-h-96 object-cover rounded-lg mb-8 shadow-md"
           />
-          <textarea
-            onChange={(e) => setContent(e.target.value)}
-            value={content}
-            placeholder="Comment"
-            className="w-full p-2 border border-gray-300 rounded outline-none h-48"
-            required
-          ></textarea>
-          <button
-            type="submit"
-            className="bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer"
-          >
-            Submit
-          </button>
-        </form>
-      </div>
+        )}
 
-      <div className="my-24 max-w-3xl mx-auto">
-        <p className="font-semibold my-4">Share this article on social media</p>
-        <div className="flex">
-          <img src={assets.facebook_icon} width={50} alt="facebook" />
-          <img src={assets.twitter_icon} width={50} alt="twitter" />
-          <img src={assets.googleplus_icon} width={50} alt="google plus" />
+        <div
+          className="text-gray-700 leading-relaxed rich-text"
+          dangerouslySetInnerHTML={{ __html: blog.description }}
+        ></div>
+
+        <div className="mt-14 mb-10 max-w-3xl mx-auto">
+          <p className="font-semibold mb-4">Comments ({comments.length})</p>
+          <div className="flex flex-col gap-4">
+            {comments.map((item, index) => (
+              <div key={index} className="relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-gray-600">
+                <div className="flex items-center gap-2 mb-2">
+                  <img src={assets.user_icon} alt="" className="w-6" />
+                  <p className="font-medium">{item.name}</p>
+                </div>
+                <p className="text-sm max-w-md ml-8">{item.content}</p>
+                <div className="absolute right-4 bottom-3 flex items-center gap-2 text-xs">
+                  {moment(item.createdAt).fromNow()}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <Footer />
-    </div>
+        <div className="max-w-3xl mx-auto">
+          <p className="font-semibold mb-4">Add your comment</p>
+          <form onSubmit={addComment} className="flex flex-col items-start gap-4 max-w-lg">
+            <input
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              type="text"
+              placeholder="Name"
+              required
+              className="w-full p-2 border border-gray-300 rounded outline-none"
+            />
+            <textarea
+              onChange={(e) => setContent(e.target.value)}
+              value={content}
+              placeholder="Comment"
+              className="w-full p-2 border border-gray-300 rounded outline-none h-48"
+              required
+            ></textarea>
+            <button
+              type="submit"
+              className="bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+
+        <div className="my-24 max-w-3xl mx-auto">
+          <p className="font-semibold my-4">Share this article on social media</p>
+          <div className="flex">
+            <img src={assets.facebook_icon} width={50} alt="facebook" />
+            <img src={assets.twitter_icon} width={50} alt="twitter" />
+            <img src={assets.googleplus_icon} width={50} alt="google plus" />
+          </div>
+        </div>
+
+        <Footer />
+      </div>
+    </>
   );
 };
 
