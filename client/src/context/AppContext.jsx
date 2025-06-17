@@ -6,14 +6,13 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [token, setToken] = useState('');
-  const [blogs, setBlogs] = useState([]); // State to store all blogs
-  const [input, setInput] = useState(''); // State for search input
-  const [loading, setLoading] = useState(true); // State to manage loading status of blogs
+  const [blogs, setBlogs] = useState([]); 
+  const [input, setInput] = useState(''); 
+  const [loading, setLoading] = useState(true); 
 
   const navigate = useNavigate();
 
-  // Set default base URL for Axios
-  // This ensures all requests are prefixed with 'http://localhost:3000/api'
+  
   axios.defaults.baseURL = 'http://localhost:3000';
 
   // Function to fetch all blogs from the backend
@@ -28,16 +27,16 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error fetching blogs:', error);
-      // Optionally show a toast error to the user here
-    } finally {
-      setLoading(false); // Set loading to false after fetching (whether success or failure)
-    }
+    // Optionally show a toast error to the user here
+  } finally {
+    setLoading(false); // Set loading to false after fetching (whether success or failure)
+  }
   };
 
   // useEffect hook to call fetchBlogs when the component mounts
   useEffect(() => {
     fetchBlogs();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []); 
 
   return (
     <AppContext.Provider value={{ token, setToken, navigate, axios, blogs, input, setInput, loading }}>

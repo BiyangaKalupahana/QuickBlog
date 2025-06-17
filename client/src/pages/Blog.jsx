@@ -5,7 +5,7 @@ import { assets } from '../assets/assets';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
-import moment from 'moment';
+import Moment from 'moment';
 import toast from 'react-hot-toast';
 
 const Blog = () => {
@@ -92,14 +92,10 @@ const Blog = () => {
       <Navbar />
       <div className="max-w-4xl mx-auto px-6 py-10">
         <div className="text-center mb-10">
-          <p className="text-sm text-gray-500 mb-2">Published on: {moment(blog.createdAt).format('MMMM Do, YYYY')}</p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">{blog.title}</h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-4">{blog.subTitle}</p>
-          {blog.author && (
-            <p className="text-sm text-gray-500">
-              By: <span className="font-semibold text-primary">{blog.author}</span>
-            </p>
-          )}
+          <p className="text-primary py-4 font-medium">Published on: {Moment(blog.createdAt).format('MMMM Do, YYYY')}</p>
+          <h1 className="text-2xl sm:text-5xl font-semibold max-w-2xl mx-auto text-gray-800">{blog.title}</h1>
+          <h2 className='my-5 max-w-lg truncate mx-auto'>{blog.subTitle}</h2>
+          <p className='inline-block py-1 px-4 rounded-full mb-6 border text-sm border-primary/35 bg-primary/5 font-medium text-primary'>Michael Brown</p>
         </div>
 
         {blog.image && (
