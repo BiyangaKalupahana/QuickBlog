@@ -57,7 +57,7 @@ const Blog = () => {
       const { data } = await axios.post('/api/blog/add-comment', {
         blog: id,
         name,
-        content
+        content,
       });
 
       if (data.success) {
@@ -96,7 +96,9 @@ const Blog = () => {
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">{blog.title}</h1>
           <p className="text-lg sm:text-xl text-gray-600 mb-4">{blog.subTitle}</p>
           {blog.author && (
-            <p className="text-sm text-gray-500">By: <span className="font-semibold text-primary">{blog.author}</span></p>
+            <p className="text-sm text-gray-500">
+              By: <span className="font-semibold text-primary">{blog.author}</span>
+            </p>
           )}
         </div>
 
@@ -166,9 +168,8 @@ const Blog = () => {
             <img src={assets.googleplus_icon} width={50} alt="google plus" />
           </div>
         </div>
-
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };

@@ -18,9 +18,8 @@ const BlogList = () => {
     }
 
     // Filter blogs whose title or category includes the search input (case-insensitive)
-    return blogs.filter((blog) =>
-      blog.title.toLowerCase().includes(input.toLowerCase()) ||
-      blog.category.toLowerCase().includes(input.toLowerCase())
+    return blogs.filter((blog) => 
+      blog.title.toLowerCase().includes(input.toLowerCase()) || blog.category.toLowerCase().includes(input.toLowerCase())
     );
   };
 
