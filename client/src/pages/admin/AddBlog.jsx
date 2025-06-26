@@ -26,7 +26,7 @@ const AddBlog = () => {
 
       try{
         setLoading(true);
-        const {data} = await axios.post('/api/blog/generate', {prompt: title})
+        const {data} = await axios.post('api/blog/generate', {prompt: title})
         if(data.success){
           quillRef.current.root.innerHTML = parse(data.content)
         } else{
@@ -81,7 +81,7 @@ const AddBlog = () => {
       }
 
 
-      const {data} = await axios.post('/blog/add', formData); // Removed '/api' assuming baseURL handles it
+      const {data} = await axios.post('/api/blog/add', formData); // Removed '/api' assuming baseURL handles it
 
       if(data.success){
         toast.success(data.message); // ✅ FIXED: toast.sucess to toast.success
